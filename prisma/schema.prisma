@@ -11,8 +11,49 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   name  String
   email String @unique
   pass  String
+
+  channels Channel[]
+  messages Message[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Message {
+  id   String @id @default(uuid())
+  type String
+  body String
+
+  chat    Chat   @relation(fields: [chat_id], references: [id])
+  chat_id String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+}
+
+model Channel {
+  id          String @id @default(uuid())
+  name        String
+  description String
+
+  user    User?   @relation(fields: [user_id], references: [id])
+  user_id String?
+
+  chat Chat?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Chat {
+  id String @id @default(uuid())
+
+  messages Message[]
+
+  channel    Channel @relation(fields: [channel_id], references: [id])
+  channel_id String  @unique
 }
