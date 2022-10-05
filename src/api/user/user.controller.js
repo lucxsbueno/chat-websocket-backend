@@ -83,30 +83,78 @@ module.exports = {
     });
   },
 
-  findUserById: (req, res) => {
+  findUserById: async (req, res) => {
     const id = req.params.id;
-    findUserById(id, (err, results) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (!results) {
-        return res.status(404).json({
-          success: false,
-          data: { message: "Nenhum usuário encontrado." }
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        data: results
+
+    try {
+      const users = await prisma.user.findUnique({
+        where: {
+          id: id
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          channels: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
+          messages: {
+            orderBy: {
+              created_at: "asc"
+            },
+            select: {
+              id: true,
+              type: true,
+              body: true,
+              chat_id: true
+            }
+          }
+        }
       });
-    });
+
+      return res.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+
+      return res.status(400).json({
+        error: true,
+        message: "Ocorreu um erro. Não foi possível processar sua solicitação.",
+        stack: error
+      });
+    }
   },
 
   findAllUsers: async (req, res) => {
-
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          channels: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
+          messages: {
+            orderBy: {
+              created_at: "asc"
+            },
+            select: {
+              id: true,
+              type: true,
+              body: true,
+              chat_id: true
+            }
+          }
+        }
+      });
 
       return res.status(200).json(users);
     } catch (error) {

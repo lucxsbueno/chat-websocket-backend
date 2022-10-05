@@ -33,6 +33,9 @@ model Message {
 
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Channel {
@@ -56,4 +59,7 @@ model Chat {
 
   channel    Channel @relation(fields: [channel_id], references: [id])
   channel_id String  @unique
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
