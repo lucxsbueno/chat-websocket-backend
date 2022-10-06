@@ -1,13 +1,14 @@
 
 const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
-const { genSaltSync, hashSync, compareSync } = require('bcrypt');
+const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 
 const {
   sign,
   verify
-} = require('jsonwebtoken');
+} = require("jsonwebtoken");
 
 module.exports = {
   createUser: async (req, res) => {
@@ -47,40 +48,51 @@ module.exports = {
     }
   },
 
-  updateUser: (req, res) => {
-    updateUser(req.body, req.params.id, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          success: false,
-          message: "A conexão com o banco de dados falhou."
-        });
-      }
+  updateUser: async (req, res) => {
+    try {
+      await prisma.user.update({
+        where: {
+          id: req.params.id
+        },
+        data: req.body
+      });
+
       return res.status(200).json({
         success: true,
-        message: "Usuário editado com sucesso.",
-        data: results
+        message: "Conta atualizada com sucesso."
       });
-    });
+    } catch (error) {
+      console.log(error);
+
+      return res.status(400).json({
+        error: true,
+        message: "Ocorreu um erro. Não foi possível processar sua solicitação.",
+        stack: error
+      });
+    }
   },
 
-  deleteUser: (req, res) => {
-    deleteUser(req.params.id, (err, results) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (!results) {
-        return res.status(404).json({
-          success: false,
-          data: { message: "O usuário não foi encontrado." }
-        });
-      }
+  deleteUser: async (req, res) => {
+    try {
+      await prisma.user.delete({
+        where: {
+          id: req.params.id
+        }
+      });
+
       return res.status(200).json({
         success: true,
-        data: { message: "Usuário deletado com sucesso!" }
+        message: "Conta deletada com sucesso."
       });
-    });
+    } catch (error) {
+      console.log(error);
+
+      return res.status(400).json({
+        error: true,
+        message: "Ocorreu um erro. Não foi possível processar sua solicitação.",
+        stack: error.message
+      });
+    }
   },
 
   findUserById: async (req, res) => {
@@ -112,6 +124,12 @@ module.exports = {
               body: true,
               chat_id: true
             }
+          },
+          _count: {
+            select: {
+              channels: true,
+              messages: true
+            }
           }
         }
       });
@@ -129,32 +147,59 @@ module.exports = {
   },
 
   findAllUsers: async (req, res) => {
+    const search = req.query.q;
+
     try {
       const users = await prisma.user.findMany({
+        where: {
+          name: {
+            contains: search
+          }
+        },
         select: {
           id: true,
           name: true,
           email: true,
-          channels: {
+          _count: {
             select: {
-              id: true,
-              name: true,
-              description: true
-            }
-          },
-          messages: {
-            orderBy: {
-              created_at: "asc"
-            },
-            select: {
-              id: true,
-              type: true,
-              body: true,
-              chat_id: true
+              channels: true,
+              messages: true
             }
           }
         }
       });
+
+      // Select de vários campos com count
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   email: true,
+      //   channels: {
+      //     select: {
+      //       id: true,
+      //       name: true,
+      //       description: true
+      //     }
+      //   },
+      //   messages: {
+      //     orderBy: {
+      //       created_at: "asc"
+      //     },
+      //     select: {
+      //       id: true,
+      //       type: true,
+      //       body: true,
+      //       chat_id: true
+      //     }
+      //   },
+      //     _count: {
+      //       select: {
+      //         channels: true,
+      //         messages: true
+      //       }
+      //     }
+      //   }
+      // });
 
       return res.status(200).json(users);
     } catch (error) {
@@ -166,56 +211,6 @@ module.exports = {
         stack: error
       });
     }
-  },
-
-  searchUser: (req, res) => {
-    searchUser(req.query.q, (err, results) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (!results || results.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "Nenhum registro encontrado."
-        });
-      }
-
-      results.forEach(user => {
-        user.pass = undefined;
-      });
-
-      return res.status(200).json({
-        success: true,
-        rows: results.length,
-        data: results
-      });
-    });
-  },
-
-  loadSession: (req, res) => {
-
-    let token = req.get("authorization");
-
-    console.log(token);
-
-    token = token.slice(7);
-
-    verify(token, process.env.SECRET_KEY, (err, decoded) => {
-      if (err) {
-        console.log(err);
-
-        return res.status(401).json({
-          success: false,
-          message: "Não autorizado."
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        token,
-        user: decoded.user
-      });
-    })
   },
 
   signin: async (req, res) => {

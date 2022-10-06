@@ -47,6 +47,9 @@ app.get("/", (req, res) => {
 const userRouter = require("./api/user/user.router");
 app.use("/users", userRouter);
 
+const channelRouter = require("./api/channel/channel.router");
+app.use("/channels", channelRouter);
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is runnig on: http://localhost:${process.env.PORT}.`);
 });
