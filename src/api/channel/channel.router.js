@@ -9,8 +9,10 @@ const { checkToken } = require("../../auth/check.token");
  * Channel controller
  */
 const {
-  findAllChannels, createChannel, deleteChannel, updateChannel
+  findAllChannels, createChannel, deleteChannel, updateChannel, findChannelById
 } = require("./channel.controller");
+
+router.get("/:id", checkToken, findChannelById);
 
 router.get("/", checkToken, findAllChannels);
 router.post("/", checkToken, createChannel);

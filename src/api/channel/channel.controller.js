@@ -4,6 +4,48 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 module.exports = {
+
+  findChannelById: async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      const chat = await prisma.chat.findMany({
+        where: {
+          channel_id: id
+        },
+        select: {
+          messages: {
+            orderBy: {
+              created_at: "asc"
+            },
+            select: {
+              id: true,
+              type: true,
+              body: true,
+              created_at: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
+          }
+        }
+      });
+
+      return res.status(200).json(chat[0].messages);
+    } catch (error) {
+      console.log(error);
+
+      return res.status(400).json({
+        error: true,
+        message: "Ocorreu um erro. Não foi possível processar sua solicitação.",
+        stack: error
+      });
+    }
+  },
+
   findAllChannels: async (req, res) => {
     const search = req.query.q;
 
@@ -18,24 +60,24 @@ module.exports = {
           id: true,
           name: true,
           description: true,
-          chat: {
-            select: {
-              id: true,
-              messages: {
-                select: {
-                  id: true,
-                  type: true,
-                  body: true,
-                  user: {
-                    select: {
-                      id: true,
-                      name: true
-                    }
-                  }
-                }
-              }
-            }
-          }
+          // chat: {
+          //   select: {
+          //     id: true,
+          //     messages: {
+          //       select: {
+          //         id: true,
+          //         type: true,
+          //         body: true,
+          //         user: {
+          //           select: {
+          //             id: true,
+          //             name: true
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // }
         }
       });
 
