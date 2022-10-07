@@ -34,7 +34,7 @@ module.exports = {
         }
       });
 
-      return res.status(200).json(chat[0].messages);
+      return res.status(200).json(chat[0]?.messages);
     } catch (error) {
       console.log(error);
 
