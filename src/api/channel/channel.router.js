@@ -16,7 +16,7 @@ router.get("/:id", checkToken, findChannelById);
 
 router.get("/", checkToken, findAllChannels);
 router.post("/", checkToken, createChannel);
-router.delete("/", checkToken, deleteChannel);
-router.put("/", checkToken, updateChannel);
+router.delete("/:id", checkToken, deleteChannel);
+router.put("/:id", checkToken, updateChannel);
 
 module.exports = router;

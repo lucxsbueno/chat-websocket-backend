@@ -17,6 +17,8 @@ model User {
   email String @unique
   pass  String
 
+  avatar String @default("https://avatars.dicebear.com/api/identicon/00000000.svg") 
+
   channels Channel[]
   messages Message[]
 
