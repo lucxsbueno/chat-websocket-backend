@@ -26,7 +26,9 @@ module.exports = {
               user: {
                 select: {
                   id: true,
-                  name: true
+                  name: true,
+                  username: true,
+                  avatar: true
                 }
               }
             }
@@ -164,6 +166,37 @@ module.exports = {
         success: true,
         status: 200,
         message: "Cannal deletado com sucesso!"
+      });
+    } catch (error) {
+      console.log(error);
+
+      return res.status(400).json({
+        error: true,
+        message: "Ocorreu um erro. Não foi possível processar sua solicitação.",
+        stack: error.message
+      });
+    }
+  },
+
+  sendMessage: async (req, res) => {
+    const { type, body, user_id, chat_id } = req.body;
+
+    const message = {
+      type,
+      body,
+      user_id,
+      chat_id
+    }
+
+    try {
+      await prisma.message.create({
+        data: message
+      });
+
+      return res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Mensagem enviada com sucesso!"
       });
     } catch (error) {
       console.log(error);

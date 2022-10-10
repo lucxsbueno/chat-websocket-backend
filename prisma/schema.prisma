@@ -16,6 +16,7 @@ model User {
   name  String
   email String @unique
   pass  String
+  username String? @default(uuid())
 
   avatar String @default("https://avatars.dicebear.com/api/identicon/00000000.svg") 
 
