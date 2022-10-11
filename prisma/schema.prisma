@@ -12,13 +12,13 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String
-  email String @unique
-  pass  String
-  username String? @default(uuid())
+  id       String  @id @default(cuid())
+  name     String
+  email    String  @unique
+  pass     String
+  username String? @default(cuid())
 
-  avatar String @default("https://avatars.dicebear.com/api/identicon/00000000.svg") 
+  avatar String @default("https://avatars.dicebear.com/api/identicon/00000000.svg")
 
   channels Channel[]
   messages Message[]
@@ -28,7 +28,7 @@ model User {
 }
 
 model Message {
-  id   String @id @default(uuid())
+  id   String @id @default(cuid())
   type String
   body String
 
@@ -43,7 +43,7 @@ model Message {
 }
 
 model Channel {
-  id          String @id @default(uuid())
+  id          String @id @default(cuid())
   name        String
   description String
 
@@ -57,7 +57,7 @@ model Channel {
 }
 
 model Chat {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   messages Message[]
 

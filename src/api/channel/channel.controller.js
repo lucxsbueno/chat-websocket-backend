@@ -62,24 +62,24 @@ module.exports = {
           id: true,
           name: true,
           description: true,
-          // chat: {
-          //   select: {
-          //     id: true,
-          //     messages: {
-          //       select: {
-          //         id: true,
-          //         type: true,
-          //         body: true,
-          //         user: {
-          //           select: {
-          //             id: true,
-          //             name: true
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
+          chat: {
+            select: {
+              id: true,
+              // messages: {
+              //   select: {
+              //     id: true,
+              //     type: true,
+              //     body: true,
+              //     user: {
+              //       select: {
+              //         id: true,
+              //         name: true
+              //       }
+              //     }
+              //   }
+              // }
+            }
+          }
         }
       });
 
@@ -179,18 +179,9 @@ module.exports = {
   },
 
   sendMessage: async (req, res) => {
-    const { type, body, user_id, chat_id } = req.body;
-
-    const message = {
-      type,
-      body,
-      user_id,
-      chat_id
-    }
-
     try {
       await prisma.message.create({
-        data: message
+        data: req.body.message
       });
 
       return res.status(200).json({

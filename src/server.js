@@ -58,6 +58,10 @@ app.use("/channels", channelRouter);
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
+  socket.on("disconnect", data => {
+    console.log("Disconnected:", data.id);
+  });
+
   socket.on("unsubscribe_room", data => {
     socket.leave(data.room);
   });
@@ -68,6 +72,10 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", async data => {
     socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("typing", data => {
+    socket.to(data.room).emit("user_is_typing", data.user);
   });
 });
 
