@@ -245,10 +245,10 @@ module.exports = {
           options: {
             issuer: "auth-api",
             algorithm: "HS256",
-            expiresIn: "86400000ms"
+            expiresIn: "86400000ms" // 10000ms = 10s
           }
         };
-
+ 
         sign(jwt.payload, jwt.secret, jwt.options, (error, token) => {
           if (error) {
             console.log("[jwt error]: ", err);

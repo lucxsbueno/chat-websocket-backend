@@ -179,6 +179,8 @@ module.exports = {
   },
 
   sendMessage: async (req, res) => {
+    console.log(req.body.message);
+    
     try {
       await prisma.message.create({
         data: req.body.message
