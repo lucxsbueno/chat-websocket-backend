@@ -50,6 +50,23 @@ module.exports = {
 
   updateUser: async (req, res) => {
     try {
+
+      const results = await prisma.user.findMany({
+        where: {
+          username: req.body.username,
+          id: {
+            not: req.params.id
+          }
+        }
+      });
+
+      if (results.length > 0) {
+        return res.status(200).json({
+          error: true,
+          message: "Este nome de usuário já está em uso! Tente outro."
+        });
+      }
+
       await prisma.user.update({
         where: {
           id: req.params.id
@@ -59,7 +76,10 @@ module.exports = {
 
       return res.status(200).json({
         success: true,
-        message: "Conta atualizada com sucesso."
+        message: "Conta atualizada com sucesso.",
+        user: {
+          ...req.body
+        }
       });
     } catch (error) {
       console.log(error);
