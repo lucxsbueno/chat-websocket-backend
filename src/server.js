@@ -58,8 +58,8 @@ app.use("/channels", channelRouter);
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
-  socket.on("disconnect", data => {
-    console.log("Disconnected:", data.id);
+  socket.on("disconnect", () => {
+    console.log("A user as disconnected.");
   });
 
   socket.on("unsubscribe_room", data => {
@@ -80,5 +80,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(process.env.PORT, () => {
-  console.log(`Server is runnig on: http://localhost:${process.env.PORT}.`);
+  // console.log(`Server is runnig on: http://localhost:${process.env.PORT}.`);
 });
