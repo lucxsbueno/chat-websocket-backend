@@ -2,7 +2,7 @@
  * 
  * Environment variables
  */
-// require("dotenv").config();
+//require("dotenv").config();
 
 /**
  * 
@@ -13,8 +13,13 @@ const app = express();
 
 const http = require("http");
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+  }
+});
 
 /**
  * 
@@ -31,13 +36,7 @@ app.use(express.json());
  */
 const cors = require("cors");
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,            //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-}
-
-app.use(cors(corsOptions)) // Use this after the variable declaration
+app.use(cors()); // Use this after the variable declaration
 
 app.get("/", (req, res) => {
   res.json({
@@ -59,7 +58,7 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("A user as disconnected.");
+    console.log("A user has disconnected.");
   });
 
   socket.on("unsubscribe_room", data => {
