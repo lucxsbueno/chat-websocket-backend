@@ -2,16 +2,16 @@
 
 Organizei as principais **tecnologias** que venho estudando ao longo do tempo para criar uma aplicação **fullstack** completa do **zero**.
 
-### Tecnologias utilizadas
+### 💥 Tecnologias utilizadas
 
-1. [Node](https://nodejs.org/en/)
-2. [Socket.IO](https://socket.io/)
-3. [JSON Web Tokens](https://jwt.io/)
-4. [Prisma: Next-generation ORM for Node.js & TypeScript](https://www.prisma.io/)
-5. [PostgreSQL: The world's most advanced open source database](https://www.postgresql.org/)
-6. [Express - framework de aplicativo da web Node.js (expressjs.com)](https://expressjs.com/pt-br/)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-### Instalação e inicialização
+### 💻 Instalação e inicialização
 
 Na pasta do projeto, rode o comando:
 
@@ -35,7 +35,8 @@ SECRET_KEY=
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 ```
 
-> Utilizei postgresql porém na documentação do [prisma](https://www.prisma.io/) você pode escolher algum banco de dados da sua preferência.
+> **Nota**: no arquivo `src/server.js` descomente a linha `5` para que seja possível utilizar variáveis de ambiente. Eu utilizei `PostgreSQL`, porém na documentação do [prisma](https://www.prisma.io/) você pode escolher algum banco de dados da sua preferência.
+> 
 
 Ao terminar a instalação rode o comando:
 ```sh
