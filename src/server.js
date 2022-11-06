@@ -79,5 +79,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(process.env.PORT, () => {
-  // console.log(`Server is runnig on: http://localhost:${process.env.PORT}.`);
+  console.log(`Server is runnig on: http://localhost:${process.env.PORT}.`);
 });
