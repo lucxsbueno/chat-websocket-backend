@@ -13,13 +13,13 @@ Organizei as principais **tecnologias** que venho estudando ao longo do tempo pa
 
 ### 💻 Instalação e inicialização
 
-Na pasta do projeto, rode o comando:
+#### Na pasta do projeto, rode o comando:
 
 ```sh
 npm install
 ```
 
-Após isso, crie um arquivo `.env` e insira as variáveis de ambiente:
+#### Após isso, crie um arquivo `.env` e insira as variáveis de ambiente:
 
 ```env
 #server
@@ -38,7 +38,7 @@ DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 > **Nota**: no arquivo `src/server.js` descomente a linha `5` para que seja possível utilizar variáveis de ambiente. Eu utilizei `PostgreSQL`, porém na documentação do [prisma](https://www.prisma.io/) você pode escolher algum banco de dados da sua preferência.
 > 
 
-Ao terminar a instalação rode o comando:
+#### Ao terminar a instalação rode o comando:
 ```sh
 npm run dev
 ```
